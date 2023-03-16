@@ -3,7 +3,7 @@ from psycopg import AsyncConnection
 import os
 
 
-async def db_requests(request) -> list:
+async def db_requests(*args, **kwargs) -> list:
     async with await AsyncConnection.connect(
             host=os.environ["HOST"],
             user=os.environ["USER"],
@@ -14,9 +14,12 @@ async def db_requests(request) -> list:
         try:
 
             async with conn.cursor() as cursor:
-                await cursor.execute(request)
-                response = await cursor.fetchall()
-                return response
+                await cursor.execute(*args, **kwargs)
+                if 'UPDATE' in args[0]:
+                    await conn.commit()
+                else:
+                    response = await cursor.fetchall()
+                    return response
         except Exception as _ex:
             print("[INFO] Ошибка в работе PostgreSQL", _ex)
         finally:
