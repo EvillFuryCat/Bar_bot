@@ -7,6 +7,7 @@ BUTTONS_PRODUCTS = [
     'BonAqua',
     'Агуша',
     'Lime',
+    'Black',
     'lack',
     'Orange',
     'Фреш',
@@ -18,5 +19,5 @@ BUTTONS_PRODUCTS = [
     'Клубничный',
     'Махито',
     'Классический',
-    'Сок',
+    'Juice',
 ]
