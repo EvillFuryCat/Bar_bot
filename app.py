@@ -46,7 +46,7 @@ async def choice_method_sales(message: types.Message):
 @dp.message_handler(commands=SALE_METHOD, state=PaymentModes.sale)
 async def choice_category(message: types.Message, state: FSMContext):
     await state.update_data(sale_methood=message.text)
-    category = await db_requests(BotDB.get_category())
+    category = await db_requests(BotDB.get_category)
     cat_list = []
     for category_tuple in category:
         for category_buttons in category_tuple:
@@ -58,7 +58,9 @@ async def choice_category(message: types.Message, state: FSMContext):
 
 @dp.message_handler(commands=CHOICE_CATEGORY, state="*")
 async def choice_prodycts(message: types.Message):
-    products = await db_requests(BotDB.get_product(message.text.replace("/", "")))
+    products = await db_requests(
+        BotDB.get_product, {"product_name": message.text.replace("/", "")}
+    )
     response = []
     for products_tuple in products:
         for products_buttons in products_tuple:
@@ -72,17 +74,22 @@ async def choice_prodycts(message: types.Message):
 async def choose_how_to_sell(message: types.Message, state: FSMContext):
     data_state = await state.get_data()
     if data_state["sale_methood"] == "/Продажа":
-        await db_requests(BotDB.add_quantity_product(message.text.replace("/", "")))
+        await db_requests(
+            BotDB.add_quantity_product, {"product_name": message.text.replace("/", "")}
+        )
         await message.answer("Продажа учтена")
     if data_state["sale_methood"] == "/Синхронизация":
-        await db_requests(BotDB.reduce_quantity_product(message.text.replace("/", "")))
+        await db_requests(
+            BotDB.reduce_quantity_product,
+            {"product_name": message.text.replace("/", "")},
+        )
         await message.answer("Синхронизация учтена")
 
 
 @dp.message_handler(commands=DEBT, state="*")
 async def get_debt(message: types.Message):
-    response_list = await db_requests(BotDB.get_debt())
-    await message.answer(f"{response_list}")
+    debt_list = await db_requests(BotDB.get_debt)
+    await message.answer(text=f"Ваш долг: {debt_list}")
 
 
 def main():

@@ -1,36 +1,34 @@
 class BotDB:
-    def get_category():
-        req = """SELECT category.name FROM category;"""
-        return req
+    get_category = """
+        SELECT category.name FROM category;
+        """
 
-    def get_all_products():
-        req = """SELECT products.name FROM products;"""
-        return req
+    get_all_products = """
+        SELECT products.name FROM products;
+        """
 
-    def get_product(product_name) -> str:
-        req = f"""SELECT products.name FROM products
+    get_product = """
+        SELECT products.name FROM products
         JOIN category ON products.category_id = category.id
-        WHERE category.name = '{product_name}';"""
-        return req
+        WHERE category.name = %(product_name)s;
+        """
 
-    def add_quantity_product(product_name) -> str:
-        req = f"""UPDATE debt SET quantity = quantity - 1
+    add_quantity_product = """
+        UPDATE debt SET quantity = quantity - 1
         WHERE products_id = (
         SELECT id FROM products
-        WHERE name = '{product_name}'
-        );"""
-        return req
+        WHERE name = %(product_name)s);
+        """
 
-    def reduce_quantity_product(product_name) -> str:
-        req = f"""UPDATE debt SET quantity = quantity + 1
+    reduce_quantity_product = """
+        UPDATE debt SET quantity = quantity + 1
         WHERE products_id = (
         SELECT id FROM products
-        WHERE name = '{product_name}'
-        );"""
-        return req
+        WHERE name = %(product_name)s);
+        """
 
-    def get_debt():
-        req = f"""SELECT products.name, debt.quantity FROM products
+    get_debt = """
+        SELECT products.name, debt.quantity FROM products
         JOIN debt ON products.id = debt.products_id
-        WHERE NOT debt.quantity = 0;"""
-        return req
+        WHERE NOT debt.quantity = 0;
+        """
