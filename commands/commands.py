@@ -2,9 +2,9 @@ START = ["start"]
 
 CASHBOX = ["Касса"]
 
-DEBT = ["Долг"]
+REPORT = ["report"]
 
-SALE_METHOD = ["Продажа", "Синхронизация"]
+SALE_METHOD = ["sale", "synchronization"]
 
 CHOICE_CATEGORY = ["Напитки", "Кофе", "Фреш", "Лимонад", "Чай"]
 
@@ -43,12 +43,11 @@ BUTTONS_PRODUCTS = [
 
 START_BUTTONS = [
     "/Касса",
-    "/Долг",
-    "/Отчет",
+    "/report",
     "/ALL",
 ]
 
 SALE_METHOD_BUTTONS = [
-    "/Продажа",
-    "/Синхронизация",
+    "/sale",
+    "/synchronization",
 ]

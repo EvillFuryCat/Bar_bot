@@ -8,7 +8,7 @@ from db import db_requests
 from database_queries import BotDB
 from commands.commands import (
     CHOICE_CATEGORY,
-    DEBT,
+    REPORT,
     SALE_METHOD,
     START,
     CASHBOX,
@@ -16,7 +16,6 @@ from commands.commands import (
     START_BUTTONS,
     SALE_METHOD_BUTTONS,
 )
-
 
 bot = Bot(token=os.getenv("TELEGRAM_TOKEN"))
 
@@ -73,12 +72,12 @@ async def choice_prodycts(message: types.Message):
 @dp.message_handler(filters.Command(commands=BUTTONS_PRODUCTS), state="*")
 async def choose_how_to_sell(message: types.Message, state: FSMContext):
     data_state = await state.get_data()
-    if data_state["sale_methood"] == "/Продажа":
+    if data_state["sale_methood"] == "/sale":
         await db_requests(
             BotDB.add_quantity_product, {"product_name": message.text.replace("/", "")}
         )
         await message.answer("Продажа учтена")
-    if data_state["sale_methood"] == "/Синхронизация":
+    if data_state["sale_methood"] == "/synchronization":
         await db_requests(
             BotDB.reduce_quantity_product,
             {"product_name": message.text.replace("/", "")},
@@ -86,10 +85,13 @@ async def choose_how_to_sell(message: types.Message, state: FSMContext):
         await message.answer("Синхронизация учтена")
 
 
-@dp.message_handler(commands=DEBT, state="*")
-async def get_debt(message: types.Message):
+@dp.message_handler(commands=REPORT, state="*")
+async def get_report(message: types.Message):
     debt_list = await db_requests(BotDB.get_debt)
-    await message.answer(text=f"Ваш долг: {debt_list}")
+    response = (
+        ("\n".join(str(item) for item in debt_list)).replace(")", "").replace("(", "")
+    )
+    await message.answer("Разница:\n{0}".format(response))
 
 
 def main():
