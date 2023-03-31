@@ -28,7 +28,13 @@ class BotDB:
         """
 
     get_debt = """
-        SELECT products.name, debt.quantity FROM products
-        JOIN debt ON products.id = debt.products_id
-        WHERE NOT debt.quantity = 0;
+        WITH dt AS
+        (SELECT products.category_id,
+                products.name,
+                debt.quantity FROM products
+                JOIN debt ON products.id = debt.products_id
+                WHERE NOT debt.quantity = 0)
+        SELECT category.name, dt.name, dt.quantity FROM category
+        JOIN ts ON category.id = dt.category_id
+        ORDER BY category.id;
         """
