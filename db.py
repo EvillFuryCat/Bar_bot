@@ -22,6 +22,7 @@ async def db_requests(*args, **kwargs) -> list:
             print("[INFO] Ошибка в работе PostgreSQL", _ex)
         finally:
             if conn:
+                await cursor.close()
                 await conn.close()
 
 

@@ -1,0 +1,30 @@
+version: '3.0'
+
+services:
+  bot:
+    build: .
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+      - .:/app
+    depends_on:
+      - db
+    env_file:
+      - .env
+    command: python3 app.py
+
+  db:
+    image: postgres:15.2
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - .:/app
+    ports:
+      - 5432:5432
+    environment:
+      DATABASE_NAME: flycafe
+      DATABASE_USER: nomad
+      DATABASE_PASSWORD: 1337
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+volumes:
+  postgres_data:
