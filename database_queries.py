@@ -35,6 +35,6 @@ class BotDB:
                 JOIN debt ON products.id = debt.products_id
                 WHERE NOT debt.quantity = 0)
         SELECT category.name, dt.name, dt.quantity FROM category
-        JOIN ts ON category.id = dt.category_id
+        JOIN dt ON category.id = dt.category_id
         ORDER BY category.id;
         """
